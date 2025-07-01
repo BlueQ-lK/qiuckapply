@@ -3,7 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Shield, LayoutDashboard, Briefcase, Bell, FileText, TimerIcon as Timeline, Settings } from "lucide-react"
+import { Shield, LayoutDashboard, Briefcase, Bell, FileText, TimerIcon as Timeline, Settings, UserRound} from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -11,7 +12,7 @@ const navigation = [
   { name: "Reminders", href: "/reminders", icon: Bell },
   { name: "Notes", href: "/notes", icon: FileText },
   { name: "Timeline", href: "/timeline", icon: Timeline },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Settings", href: "/settings", icon: Settings },  
 ]
 
 export function DashboardSidebar() {
@@ -47,6 +48,15 @@ export function DashboardSidebar() {
               </ul>
             </li>
           </ul>
+          <Link href="/profile">
+            <div className="flex text-muted-foreground hover:text-foreground hover:bg-muted group gap-x-3 rounded-md p-2 text-base font-semibold items-center">
+              <Avatar>
+                <AvatarImage src="https://gravatar.com/avatar/d36a4b28f6eb953cccdc495f1e2e1314?s=400&d=robohash&r=x" className="bg-muted-foreground/30"/>
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div>Profile</div>
+            </div>
+          </Link>
         </nav>
       </div>
     </div>

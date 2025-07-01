@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-provider"
 import { DashboardSidebar } from "./sidebar"
 import { DashboardHeader } from "./header"
-import { QuickAddReminder } from "../reminders/quick-add-reminder"
+import { InboxView } from "./inbox"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -41,7 +41,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="lg:pl-64">
         <DashboardHeader />
         <main className="p-6">{children}</main>
-        <QuickAddReminder />
+        <InboxView />
       </div>
     </div>
   )

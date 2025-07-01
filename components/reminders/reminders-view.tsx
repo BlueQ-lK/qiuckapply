@@ -1,29 +1,35 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Calendar, Clock, CheckCircle, Briefcase } from "lucide-react"
-import { useReminders } from "@/hooks/use-reminders"
-import { formatDistanceToNow, format } from "date-fns"
-import { useState } from "react"
-import { AddReminderModal } from "./add-reminder-modal"
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Plus, Calendar, Clock, CheckCircle, Briefcase } from "lucide-react";
+import { useReminders } from "@/hooks/use-reminders";
+import { formatDistanceToNow, format } from "date-fns";
+import { useState } from "react";
+import { AddReminderModal } from "./add-reminder-modal";
 
 export function RemindersView() {
-  const { reminders, isLoading, toggleReminder, addReminder } = useReminders()
+  const { reminders, isLoading, toggleReminder, addReminder } = useReminders();
 
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const handleAddReminder = async (reminderData: any) => {
     try {
-      await addReminder(reminderData)
-      setIsAddModalOpen(false)
+      await addReminder(reminderData);
+      setIsAddModalOpen(false);
     } catch (error) {
       // Error is handled in the hook
     }
-  }
+  };
 
-  const upcomingReminders = reminders.filter((r) => !r.completed)
-  const completedReminders = reminders.filter((r) => r.completed)
+  const upcomingReminders = reminders.filter((r) => !r.completed);
+  const completedReminders = reminders.filter((r) => r.completed);
 
   if (isLoading) {
     return (
@@ -40,7 +46,7 @@ export function RemindersView() {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -82,14 +88,21 @@ export function RemindersView() {
                 <Clock className="mr-2 h-5 w-5" />
                 Upcoming Reminders
               </CardTitle>
-              <CardDescription>{upcomingReminders.length} pending reminders</CardDescription>
+              <CardDescription>
+                {upcomingReminders.length} pending reminders
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {upcomingReminders.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">All caught up! No pending reminders.</p>
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  All caught up! No pending reminders.
+                </p>
               ) : (
                 upcomingReminders.map((reminder) => (
-                  <div key={reminder.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={reminder.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex-1">
                       <h4 className="font-medium">{reminder.title}</h4>
                       {reminder.jobs && (
@@ -100,13 +113,22 @@ export function RemindersView() {
                       )}
                       <div className="flex items-center mt-1 text-xs text-muted-foreground">
                         <Calendar className="mr-1 h-3 w-3" />
-                        {format(new Date(reminder.due_date), "MMM d, yyyy")} •{" "}
-                        {formatDistanceToNow(new Date(reminder.due_date), { addSuffix: true })}
+                        {format(
+                          new Date(reminder.due_date),
+                          "MMM d, yyyy"
+                        )} •{" "}
+                        {formatDistanceToNow(new Date(reminder.due_date), {
+                          addSuffix: true,
+                        })}
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge variant="outline">{reminder.type}</Badge>
-                      <Button size="sm" variant="outline" onClick={() => toggleReminder(reminder.id)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => toggleReminder(reminder.id)}
+                      >
                         <CheckCircle className="h-4 w-4" />
                       </Button>
                     </div>
@@ -122,16 +144,25 @@ export function RemindersView() {
                 <CheckCircle className="mr-2 h-5 w-5" />
                 Completed
               </CardTitle>
-              <CardDescription>{completedReminders.length} completed reminders</CardDescription>
+              <CardDescription>
+                {completedReminders.length} completed reminders
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {completedReminders.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">No completed reminders yet.</p>
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No completed reminders yet.
+                </p>
               ) : (
                 completedReminders.slice(0, 5).map((reminder) => (
-                  <div key={reminder.id} className="flex items-center justify-between p-3 border rounded-lg opacity-60">
+                  <div
+                    key={reminder.id}
+                    className="flex items-center justify-between p-3 border rounded-lg opacity-60"
+                  >
                     <div className="flex-1">
-                      <h4 className="font-medium line-through">{reminder.title}</h4>
+                      <h4 className="font-medium line-through">
+                        {reminder.title}
+                      </h4>
                       {reminder.jobs && (
                         <p className="text-sm text-muted-foreground flex items-center">
                           <Briefcase className="mr-1 h-3 w-3" />
@@ -151,7 +182,11 @@ export function RemindersView() {
           </Card>
         </div>
       )}
-      <AddReminderModal open={isAddModalOpen} onOpenChange={setIsAddModalOpen} onSubmit={handleAddReminder} />
+      <AddReminderModal
+        open={isAddModalOpen}
+        onOpenChange={setIsAddModalOpen}
+        onSubmit={handleAddReminder}
+      />
     </div>
-  )
+  );
 }

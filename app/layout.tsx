@@ -10,8 +10,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "QuietApply - Private Job Application Tracker",
-  description: "Track your job applications privately with peace of mind",
-    generator: 'v0.dev'
+  description: "Track your job applications privately with peace of mind"
 }
 
 export default function RootLayout({

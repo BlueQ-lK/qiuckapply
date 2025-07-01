@@ -8,17 +8,22 @@ import { AddJobModal } from "./add-job-modal"
 import { Plus, Search, Filter } from "lucide-react"
 import { useJobs } from "@/hooks/use-jobs"
 import { Briefcase } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 
 export function JobTracker() {
-  const { jobs, isLoading, addJob } = useJobs()
+  const { jobs, isLoading, addJob, refetch } = useJobs()
   const [searchTerm, setSearchTerm] = useState("")
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [filterValue, setFilterValue] = useState(false)
+  const [selectedStatus, setSelectedStatus] = useState<string[]>([])
 
   const filteredJobs = jobs.filter(
-    (job) =>
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.position.toLowerCase().includes(searchTerm.toLowerCase()),
+    (job) => {
+      const matchesSearch = job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.position.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesStatus = selectedStatus.length === 0 || selectedStatus.includes(job.status)
+      return matchesSearch && matchesStatus
+    }
   )
 
   const handleAddJob = async (jobData: any) => {
@@ -28,6 +33,15 @@ export function JobTracker() {
     } catch (error) {
       // Error is handled in the hook
     }
+  }
+
+  const toggleStatus = (status: string) => {
+    refetch()
+    setSelectedStatus((prev) => 
+    prev.includes(status)
+    ? prev.filter((s) => s !== status)
+    : [...prev, status]
+  )
   }
 
   if (isLoading) {
@@ -82,8 +96,24 @@ export function JobTracker() {
           </Button>
         </div>
       )}
-      {filterValue && (
-        <p>Hello world</p>
+       {filterValue && (
+        <Card>
+          <CardHeader className="pb-1">
+            <CardTitle className="text-xl">Status</CardTitle>
+          </CardHeader>
+          <CardContent className="space-x-4">
+            {["Applied", "Interview", "Offer", "Rejected", "Waiting"].map((status) => (
+              <Button
+                key={status}
+                variant={selectedStatus.includes(status) ? "default" : "outline"}
+                onClick={() => toggleStatus(status)}
+                className=""
+              >
+                {status}
+              </Button>
+            ))}
+          </CardContent>
+        </Card>
       )}
       {jobs.length === 0 ? (
         <div className="text-center py-12">

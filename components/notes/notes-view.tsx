@@ -8,10 +8,12 @@ import { Badge } from "@/components/ui/badge"
 import { Plus, Search, FileText, Calendar, Briefcase } from "lucide-react"
 import { useNotes } from "@/hooks/use-notes"
 import { formatDistanceToNow } from "date-fns"
+import { AddNoteModal } from "./add-note-modal"
 
 export function NotesView() {
   const { notes, isLoading } = useNotes()
   const [searchTerm, setSearchTerm] = useState("")
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
   const filteredNotes = notes.filter(
     (note) =>
@@ -36,6 +38,10 @@ export function NotesView() {
         </div>
       </div>
     )
+  }
+
+  function handleAddNote(noteData: any): Promise<void> {
+    throw new Error("Function not implemented.")
   }
 
   return (
@@ -76,7 +82,7 @@ export function NotesView() {
           <p className="text-muted-foreground mb-4">
             Start taking notes about companies, interviews, and your job search strategy.
           </p>
-          <Button>
+          <Button onClick={() => setIsAddModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Create Your First Note
           </Button>
@@ -119,6 +125,11 @@ export function NotesView() {
           ))}
         </div>
       )}
+      <AddNoteModal 
+        open={isAddModalOpen}
+        onOpenChange={setIsAddModalOpen}
+        onSubmit={handleAddNote}
+      />
     </div>
   )
 }

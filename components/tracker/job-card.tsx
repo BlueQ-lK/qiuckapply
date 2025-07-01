@@ -4,13 +4,14 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, DollarSign, FileText, ExternalLink, Bell } from "lucide-react"
+import { Calendar, MapPin, IndianRupee, FileText, ExternalLink, Bell } from "lucide-react"
 import type { Job } from "@/lib/supabase"
 import { useJobs } from "@/hooks/use-jobs"
 import { formatDistanceToNow } from "date-fns"
 import { AddReminderModal } from "../reminders/add-reminder-modal"
 import { useReminders } from "@/hooks/use-reminders"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { JobViewAll } from "./job-view"
 
 interface JobCardProps {
   job: Job
@@ -27,10 +28,11 @@ const statusColors = {
 const statusOptions = ["Applied", "Interview", "Offer", "Rejected", "Waiting"] as const
 
 export function JobCard({ job }: JobCardProps) {
-  const { updateJob } = useJobs()
+  const { updateJob, refetch } = useJobs()
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false)
   const { addReminder } = useReminders()
   const [updateStatus, setUpdateStatus] = useState<(typeof statusOptions)[number] | undefined>(job.status)
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleStatusChange = async (newStatus: (typeof statusOptions)[number]) => {
     try {
@@ -50,8 +52,12 @@ export function JobCard({ job }: JobCardProps) {
     }
   }
 
+  function handleUpdateJob(jobData: any): Promise<void> {
+    throw new Error("Function not implemented.")
+  }
+
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:shadow-xl transition-shadow shadow-md">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -88,7 +94,7 @@ export function JobCard({ job }: JobCardProps) {
         )}
         {job.salary && (
           <div className="flex items-center text-sm text-muted-foreground">
-            <DollarSign className="mr-2 h-4 w-4" />
+            <IndianRupee className="mr-2 h-4 w-4" />
             {job.salary}
           </div>
         )}
@@ -112,6 +118,7 @@ export function JobCard({ job }: JobCardProps) {
             ))}
             </SelectContent>
           </Select>
+          <Button size="sm" variant="outline" onClick={() => setIsSheetOpen(true)}>View</Button>
           <Button size="sm" variant="outline" className="bg-transparent" onClick={() => setIsReminderModalOpen(true)}>
             <Bell className="h-4 w-4" />
           </Button>
@@ -122,7 +129,13 @@ export function JobCard({ job }: JobCardProps) {
         onOpenChange={setIsReminderModalOpen}
         onSubmit={handleAddReminder}
         preselectedJobId={job.id}
-      />
+        />
+        <JobViewAll 
+          open={isSheetOpen}
+          onOpenChange={setIsSheetOpen}
+          onSubmit={handleUpdateJob}
+          job={job}
+        />
     </Card>
   )
 }
